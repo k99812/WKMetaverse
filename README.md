@@ -49,10 +49,7 @@ Immersive virtual platforms have been around for two decades. Some perhaps remem
 ### Platform
   * Android, preferentially
   * Oculus Quest2
-  
-## Logo
-
-  <img src="Docs/IwkU.png" style="width:420px"></img>
+ 
 
 ## Contribution
 
