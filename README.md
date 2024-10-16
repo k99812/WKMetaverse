@@ -51,14 +51,6 @@ Immersive virtual platforms have been around for two decades. Some perhaps remem
   * Oculus Quest2
  
 
-## Contribution
-
-See [CONTRIBUTING.md]
-
-* Thanks for 방지원, 노은혜 on Season1
-* Special Thanks for 한석호 on Season1 and Season2
-* Thanks for 김동규, 문지양, 최민경 on Season2 Version2
-
 ## License
 
 [MIT License]
