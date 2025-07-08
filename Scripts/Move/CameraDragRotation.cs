@@ -19,14 +19,14 @@ public class CameraDragRotation : MonoBehaviour, IBeginDragHandler, IDragHandler
     float yAngleTemp;
 
     [SerializeField]
-    private float limit_yAngle_lest = -30f; //Ä«¸Ş¶óÀÇ °ªÀ» ÁÙÀÌ¸é À§·Î ´õ º¼ ¼ö ÀÖ°Ô µÊ 
+    private float limit_yAngle_lest = -30f; //ì¹´ë©”ë¼ì˜ ê°’ì„ ì¤„ì´ë©´ ìœ„ë¡œ ë” ë³¼ ìˆ˜ ìˆê²Œ ë¨ 
     [SerializeField]
     private float limit_yAngle_MAX = 70;
 
     private void Start()
     {
-        xAngle = cameraArm.position.x;
-        yAngle = cameraArm.position.y;
+        xAngle = 0;
+        yAngle = 0;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -52,9 +52,9 @@ public class CameraDragRotation : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
         SecondPoint = a_SecondPoint;
         xAngle = xAngleTemp + (SecondPoint.x - FirstPoint.x) * 180 / Screen.width;
-        yAngle = yAngleTemp - (SecondPoint.y - FirstPoint.y) * 90 * 3f / Screen.height; // Y°ª º¯È­°¡ Á» ´À·Á¼­ 3¹è °öÇØÁÜ.
+        yAngle = yAngleTemp - (SecondPoint.y - FirstPoint.y) * 90 * 3f / Screen.height; // Yê°’ ë³€í™”ê°€ ì¢€ ëŠë ¤ì„œ 3ë°° ê³±í•´ì¤Œ.
 
-        // È¸Àü°ªÀ» 40~85·Î Á¦ÇÑ
+        // íšŒì „ê°’ì„ 40~85ë¡œ ì œí•œ
         if (yAngle < limit_yAngle_lest)
             yAngle = limit_yAngle_lest;
         if (yAngle > limit_yAngle_MAX)
