@@ -34,82 +34,64 @@ public class VirtualJoyStickMove : MonoBehaviour
     private PhotonView pv;
     [SerializeField]
     private GameObject[] uiObj;
+
+    private void Awake()
+    {
+        animator = characterBody.GetComponent<Animator>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         GameObject[] characterBodys = GameObject.FindGameObjectsWithTag("Player");
         pv = gameObject.GetComponent<PhotonView>();
-        foreach (GameObject input in characterBodys)
+        if (pv != null)
         {
-            
-            if (!input.GetComponent<PhotonView>().IsMine)
+            foreach (GameObject input in characterBodys)
             {
-                Destroy(input.GetComponent<VirtualJoyStickMove>());
-                if (!pv.IsMine)
+                if (!input.GetComponent<PhotonView>().IsMine)
                 {
-                    for (int i = 0; i < uiObj.Length; i++)
+                    Destroy(input.GetComponent<VirtualJoyStickMove>());
+                    if (!pv.IsMine)
                     {
-                        Destroy(uiObj[i]);
+                        for (int i = 0; i < uiObj.Length; i++)
+                        {
+                            Destroy(uiObj[i]);
+                        }
                     }
-                }
 
+                }
             }
         }
-        animator = characterBody.GetComponent<Animator>();
+       
         isJump = false;
-        
-    }
-
-    private void Update()
-    {
-        Debug.Log(isJump);
-        animator.SetBool("isJump", isJump);
-        //jumpBtn.enabled = !isJumping;
     }
 
     private void FixedUpdate()
     {
         Move();
-
-       /* Debug.DrawRay(rigid.position, -transform.up, Color.blue);
-        RaycastHit raycastHit;
-
-        if (Physics.Raycast(rigid.position, -transform.up, out raycastHit, RayRange, LayerMask.GetMask("Ground")))
-        {
-            isJump = false;
-        }
-        Debug.Log(raycastHit.collider.gameObject.name);*/
     }
 
     public void Move()
     {
-        // if (!ismine) return;
-        // ÀÌµ¿ ¹æÇâ ±¸ÇÏ±â 1
-        //Debug.DrawRay(cameraArm.position, cameraArm.forward, Color.red);
-
-        // ÀÌµ¿ ¹æÇâ ±¸ÇÏ±â 2
-        //Debug.DrawRay(cameraArm.position, new Vector3(cameraArm.forward.x, 0f, cameraArm.forward.z).normalized, Color.red);
-
-        // ÀÌµ¿ ¹æÇâÅ° ÀÔ·Â °ª °¡Á®¿À±â
+        // ì´ë™ ë°©í–¥í‚¤ ì…ë ¥ ê°’ ê°€ì ¸ì˜¤ê¸°
         Vector2 moveInput = new Vector2(joystick.Horizontal, joystick.Vertical);
-        // ÀÌµ¿ ¹æÇâÅ° ÀÔ·Â ÆÇÁ¤ : ÀÌµ¿ ¹æÇâ º¤ÅÍ°¡ 0º¸´Ù Å©¸é ÀÔ·ÂÀÌ ¹ß»ıÇÏ°í ÀÖ´Â Áß
+        // ì´ë™ ë°©í–¥í‚¤ ì…ë ¥ íŒì • : ì´ë™ ë°©í–¥ ë²¡í„°ê°€ 0ë³´ë‹¤ í¬ë©´ ì…ë ¥ì´ ë°œìƒí•˜ê³  ìˆëŠ” ì¤‘
         bool isMove = moveInput.magnitude != 0;
-        // ÀÔ·ÂÀÌ ¹ß»ıÇÏ´Â ÁßÀÌ¶ó¸é ÀÌµ¿ ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı
+        // ì…ë ¥ì´ ë°œìƒí•˜ëŠ” ì¤‘ì´ë¼ë©´ ì´ë™ ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ
         animator.SetBool("isMove", isMove);
         if (isMove)
         {
-            // Ä«¸Ş¶ó°¡ ¹Ù¶óº¸´Â ¹æÇâ
+            // ì¹´ë©”ë¼ê°€ ë°”ë¼ë³´ëŠ” ë°©í–¥
             Vector3 lookForward = new Vector3(cameraArm.forward.x, 0f, cameraArm.forward.z).normalized;
-            // Ä«¸Ş¶óÀÇ ¿À¸¥ÂÊ ¹æÇâ
+            // ì¹´ë©”ë¼ì˜ ì˜¤ë¥¸ìª½ ë°©í–¥
             Vector3 lookRight = new Vector3(cameraArm.right.x, 0f, cameraArm.right.z).normalized;
-            // ÀÌµ¿ ¹æÇâ
+            // ì´ë™ ë°©í–¥
             Vector3 moveDir = lookForward * moveInput.y + lookRight * moveInput.x;
 
-            // ÀÌµ¿ÇÒ ¶§ Ä«¸Ş¶ó°¡ º¸´Â ¹æÇâ ¹Ù¶óº¸±â
-            //characterBody.forward = lookForward;
-            // ÀÌµ¿ÇÒ ¶§ ÀÌµ¿ ¹æÇâ ¹Ù¶óº¸±â
+            // ì´ë™í•  ë•Œ ì´ë™ ë°©í–¥ ë°”ë¼ë³´ê¸°
             characterBody.forward = moveDir;
-            // ÀÌµ¿
+            // ì´ë™
             transform.position += moveDir * Time.deltaTime * player_speed;
         }
         else if(!isMove && !isJump)
@@ -118,26 +100,26 @@ public class VirtualJoyStickMove : MonoBehaviour
         }
     }
 
-    //Á¡ÇÁ 
+    //ì í”„ 
     public void Jump()
     {
         if (!isJump)
         {
             isJump = true;
+            animator.SetBool("isJump", true);
             animator.SetTrigger("Jump");
             rigid.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-            
         }
     }
 
     
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision.gameObject.tag);
+        //Debug.Log(collision.gameObject.tag);
         if (collision.gameObject.tag == "Ground")
         {
             isJump = false;
+            animator.SetBool("isJump", false);
         }
     }
-    
 }
