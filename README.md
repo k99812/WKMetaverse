@@ -1,7 +1,31 @@
-# WKMetaverse
-원광대메타버스 작업한 코드
+## WKDCMetaverseS2
+| 항목 | 내용 | 비고 |
+|------|------|------|
+| 개발 기간 | 2022.06 ~ 2023.02	 |
+| 엔진 | Unity 2021.3.14f1 |
+| 언어 | C# |
+| 주요 시스템 | UGUI / Photon / NativeGallery |
 
-# 플레이모습
+<br/>
+
+아래 링크에서 해당프로젝트에 쓰인 플로우차트를 확인할 수 있습니다.
+
+<a href="https://www.figma.com/board/vSDbySXst7xYlMhZew8J1L/WKM-System-flow?node-id=0-1&t=L0rwCpZiX0pDOKq9-1" height="5" width="10" target="_blank" >
+<img src="https://img.shields.io/badge/플로우 차트 (Figma)-000000?style=for-the-badge&logo=figma&logoColor=white">
+</a>
+
+<br/>
+
+## 담당 개발 기능
+
+* 포톤 엔진을 이용해 멀티플레이 구현
+* Photon의 RPC 기능을 활용한 실시간 채팅 구현
+* 캐릭터 스폰 및 동기화, 캐릭터 선택 기능 구현
+* 기본 캐릭터 이동 및 조작 시스템 개발
+
+<br/>
+
+## 플레이모습
 ---
 ![Animation](https://github.com/k99812/WKMetaverse/assets/108670965/e33e461d-b901-4bcd-a601-a2b38b31b9a2)
 <br>
@@ -10,6 +34,37 @@
 ![Animation (3)](https://github.com/k99812/WKMetaverse/assets/108670965/67655280-2ba0-4a1c-8454-946ee6042e98)  
 
 ![Animation (2)](https://github.com/k99812/WKMetaverse/assets/108670965/74ea1206-8cfc-4f3f-b7ff-1461fb4b5c1c)  
+
+<br/>
+
+# 기술 설명서
+## 프로젝트 전체 구조
+<img width="1434" height="449" alt="image" src="https://github.com/user-attachments/assets/25b6e2c8-de4d-4367-98e6-b3cd4e8cea2e" />
+
+## Photon 구조
+
+
+<br/>
+
+## 캐릭터 선택기능 및 싱글/멀티플레이 선택
+
+
+<br/>
+
+## 캐릭터 컨트롤
+
+
+<br/>
+
+## 채팅 기능
+
+
+<br/>
+
+## 사진 기능
+
+
+<br/>
 
 # WKDCMetaverseS2
 
