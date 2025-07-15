@@ -31,13 +31,13 @@ public class CameraDragRotation : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (!PV.IsMine) return;
+        if (PV != null && !PV.IsMine) return;
         BeginDrag(eventData.position);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (!PV.IsMine) return;
+        if (PV != null && !PV.IsMine) return;
         OnDrag(eventData.position);       
     }
 
