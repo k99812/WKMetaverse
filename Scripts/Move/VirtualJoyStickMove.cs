@@ -31,39 +31,25 @@ public class VirtualJoyStickMove : MonoBehaviour
 
     Animator animator;
     [SerializeField]
-    private PhotonView pv;
+    private PhotonView PV;
     [SerializeField]
     private GameObject[] uiObj;
+
+    private CharacterManager characterManager;
 
     private void Awake()
     {
         animator = characterBody.GetComponent<Animator>();
+        GameObject gameObject = GameObject.Find("CharacterManager");
+        if (gameObject != null)
+        {
+            characterManager = gameObject.GetComponent<CharacterManager>();
+        }
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        GameObject[] characterBodys = GameObject.FindGameObjectsWithTag("Player");
-        pv = gameObject.GetComponent<PhotonView>();
-        if (pv != null)
-        {
-            foreach (GameObject input in characterBodys)
-            {
-                if (!input.GetComponent<PhotonView>().IsMine)
-                {
-                    Destroy(input.GetComponent<VirtualJoyStickMove>());
-                    if (!pv.IsMine)
-                    {
-                        for (int i = 0; i < uiObj.Length; i++)
-                        {
-                            Destroy(uiObj[i]);
-                        }
-                    }
-
-                }
-            }
-        }
-       
         isJump = false;
     }
 
@@ -74,6 +60,9 @@ public class VirtualJoyStickMove : MonoBehaviour
 
     public void Move()
     {
+        if (characterManager != null && characterManager.onOffSet == CharacterManager.OnOffSet.OnLine
+            && PV != null && !PV.IsMine) return;
+
         // 이동 방향키 입력 값 가져오기
         Vector2 moveInput = new Vector2(joystick.Horizontal, joystick.Vertical);
         // 이동 방향키 입력 판정 : 이동 방향 벡터가 0보다 크면 입력이 발생하고 있는 중
@@ -103,6 +92,9 @@ public class VirtualJoyStickMove : MonoBehaviour
     //점프 
     public void Jump()
     {
+        if (characterManager != null && characterManager.onOffSet == CharacterManager.OnOffSet.OnLine
+            && PV != null && !PV.IsMine) return;
+
         if (!isJump)
         {
             isJump = true;
@@ -122,4 +114,5 @@ public class VirtualJoyStickMove : MonoBehaviour
             animator.SetBool("isJump", false);
         }
     }
+    
 }
