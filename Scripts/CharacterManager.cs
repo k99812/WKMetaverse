@@ -13,7 +13,14 @@ public class CharacterManager : MonoBehaviour
     [SerializeField]
     public List<GameObject> Characters = new List<GameObject>();
 
+    [SerializeField]
+    private Dictionary<int, GameObject> CharacterMap = new Dictionary<int, GameObject>();
+
     private const int Young_Boy = 1, Boy = 2, Girl = 3;
+
+    [SerializeField]
+    private List<string> CharacterNames = new List<string>() { "None", "Player_V9_CamTest", 
+        "Player_Man_V9_CamTest", "Player_Girl_V9_CamTest" };
 
     private int Character_Code = Young_Boy;
 
@@ -39,9 +46,15 @@ public class CharacterManager : MonoBehaviour
        
     }
 
+    private void Start()
+    {
+        CharacterMap[Young_Boy] = Resources.Load<GameObject>(CharacterNames[Young_Boy]);
+        CharacterMap[Boy] = Resources.Load<GameObject>(CharacterNames[Boy]);
+        CharacterMap[Girl] = Resources.Load<GameObject>(CharacterNames[Girl]);
+    }
+
     public void On_Character_Code(int code)
     {
-        print(code); 
         switch (code)
         {
             case Young_Boy:
@@ -63,6 +76,10 @@ public class CharacterManager : MonoBehaviour
     }
 
     public int get_Character_Code() { return Character_Code; }
+
+    public string GetSelectedCharacterName() { return CharacterMap[Character_Code].name; }
+
+    public GameObject GetSelectedCharacter() { return CharacterMap[Character_Code]; }
 
     private void off_Chracters()
     {
