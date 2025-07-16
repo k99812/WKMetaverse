@@ -41,12 +41,62 @@
 ## 프로젝트 전체 구조
 <img width="1434" height="449" alt="image" src="https://github.com/user-attachments/assets/25b6e2c8-de4d-4367-98e6-b3cd4e8cea2e" />
 
-## Photon 구조
-
+1. 프로젝트 실행시 MainLoby Scene이 실행됩니다.
+2. MainLoby에서 싱글/멀티 중 하나를 선택하면 CharacterSelec Scene으로 이동합니다.
+3. 캐릭터 선택후 Go 버튼을 누르면 Main Scene으로 이동합니다
+4. 싱글플레이의 경우 바로 캐릭터가 스폰되며 멀티플레이는 NetworManager 스크립트에 의해 UI가 표시됩니다
 
 <br/>
 
-## 캐릭터 선택기능 및 싱글/멀티플레이 선택
+## NetworManager
+<img width="1480" height="382" alt="image" src="https://github.com/user-attachments/assets/b90e2039-34a7-4004-b1d2-1f9d161b6602" />
+
+멀티플레이로 선택시 포톤 접속 ~ 캐릭터 스폰까지의 과정입니다.   
+
+<br/>
+
+> NetworManager
+
+    private CharacterManager Character_Manager;
+    
+    //Start()
+    void Start()
+    {
+         GameObject gameObject = GameObject.Find("CharacterManager");
+         if (gameObject != null) 
+         {
+             Character_Manager = gameObject.GetComponent<CharacterManager>();
+         }
+
+         ~~~
+         
+    }
+
+Start 함수에서 CharacterManager 초기화
+
+<br/>
+
+> SpawnCoroutine
+    
+    //Start()
+    IEnumerator SpawnCoroutine(float spawnTime)
+    {
+         ~~~
+         
+        if (Character_Manager != null)
+        {
+            player = PhotonNetwork.Instantiate(Character_Manager.GetSelectedCharacterName(), spawnList[spawnPo].position, spawnList[spawnPo].rotation, 0);
+        }
+
+         ~~~
+         
+    }
+
+가져온 CharacterManager를 통해 선택한 캐릭터의 이름을 가져와 PhotonNetwork.Instantiate() 함수를 이용하여 생성
+
+<br/>
+
+## CharacterManager
 
 
 <br/>
