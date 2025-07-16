@@ -23,21 +23,31 @@ public class CameraDragRotation : MonoBehaviour, IBeginDragHandler, IDragHandler
     [SerializeField]
     private float limit_yAngle_MAX = 70;
 
+    private CharacterManager characterManager;
+
     private void Start()
     {
         xAngle = 0;
         yAngle = 0;
+
+        GameObject gameObject = GameObject.Find("CharacterManager");
+        if (gameObject != null)
+        {
+            characterManager = gameObject.GetComponent<CharacterManager>();
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (PV != null && !PV.IsMine) return;
+        if (characterManager != null && characterManager.onOffSet == CharacterManager.OnOffSet.OnLine
+            && PV != null && !PV.IsMine) return;
         BeginDrag(eventData.position);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (PV != null && !PV.IsMine) return;
+        if (characterManager != null && characterManager.onOffSet == CharacterManager.OnOffSet.OnLine
+            && PV != null && !PV.IsMine) return;
         OnDrag(eventData.position);       
     }
 
