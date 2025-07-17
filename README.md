@@ -38,9 +38,10 @@
 <br/>
 
 # 기술 설명서
-## 프로젝트 전체 구조
+## 프로젝트 전체 구성
 <img width="1434" height="449" alt="image" src="https://github.com/user-attachments/assets/25b6e2c8-de4d-4367-98e6-b3cd4e8cea2e" />
 
+프로젝트 실행 순서    
 1. 프로젝트 실행시 MainLoby Scene이 실행됩니다.
 2. MainLoby에서 싱글/멀티 중 하나를 선택하면 CharacterSelec Scene으로 이동합니다.
 3. 캐릭터 선택후 Go 버튼을 누르면 Main Scene으로 이동합니다
@@ -50,59 +51,200 @@
 
 ## NetworManager
 <img width="1480" height="382" alt="image" src="https://github.com/user-attachments/assets/b90e2039-34a7-4004-b1d2-1f9d161b6602" />
-
-멀티플레이로 선택시 포톤 접속 ~ 캐릭터 스폰까지의 과정입니다.   
+   
+NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트를 저장소에 올리지 않았습니다.
+* 멀티플레이로 선택시 포톤 접속 ~ 캐릭터 스폰까지의 과정입니다.
+* 네트워크 매니저는 포톤 접속, 캐릭터 스폰, 네트워크UI를 담당
 
 <br/>
 
 > NetworManager
-
-    private CharacterManager Character_Manager;
     
-    //Start()
-    void Start()
-    {
-         GameObject gameObject = GameObject.Find("CharacterManager");
-         if (gameObject != null) 
-         {
-             Character_Manager = gameObject.GetComponent<CharacterManager>();
-         }
-
-         ~~~
-         
-    }
-
-Start 함수에서 CharacterManager 초기화
-
-<br/>
-
-> SpawnCoroutine
-    
-    //Start()
+    //SpawnCoroutine()
     IEnumerator SpawnCoroutine(float spawnTime)
     {
          ~~~
          
         if (Character_Manager != null)
         {
-            player = PhotonNetwork.Instantiate(Character_Manager.GetSelectedCharacterName(), spawnList[spawnPo].position, spawnList[spawnPo].rotation, 0);
+            player = PhotonNetwork.Instantiate(CharacterManager.Instance.GetSelectedCharacterName(), spawnList[spawnPo].position, spawnList[spawnPo].rotation, 0);
         }
 
          ~~~
          
     }
 
-가져온 CharacterManager를 통해 선택한 캐릭터의 이름을 가져와 PhotonNetwork.Instantiate() 함수를 이용하여 생성
+* CharacterManager인스턴스를 통해 선택한 캐릭터의 이름을 가져와 PhotonNetwork.Instantiate() 함수를 이용하여 캐릭터 스폰
 
 <br/>
 
 ## CharacterManager
+<img width="460" height="792" alt="image" src="https://github.com/user-attachments/assets/06f3dc95-6732-41b2-bc2d-96aebe5d3f7a" />
 
+<br/>
+
+* 캐릭터 매니저는 플레이어의 싱글/멀티 정보, 선택된 캐릭터 정보, 캐릭터 선택 씬에서 캐릭터 온오프 기능을 담당
+
+<br/>
+
+> CharacterManager
+    
+    public static CharacterManager Instance { get; private set;  }
+
+    private void Awake()
+    {
+        if (null == Instance)
+        {
+            Instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+       
+    }
+
+캐릭터 매니저는 싱글톤 패턴을 활용하여 인스턴스를 생성
+
+<br/>
+
+### 온라인/오프라인 선택
+<img width="556" height="135" alt="image" src="https://github.com/user-attachments/assets/5f54ae31-d1b8-4abf-9685-c61dc6a63ebe" />
+
+* 버튼 OnClick 이벤트에 Set_OnOff 함수 바인드
+
+> CharacterManager
+    
+    public enum OnOffSet
+    {
+        OnLine, OffLine
+    }
+    public OnOffSet onOffSet = OnOffSet.OnLine;
+
+    public void Set_OnOff(int InCode)
+    {
+        onOffSet = InCode == 1 ? OnOffSet.OnLine : OnOffSet.OffLine;
+    }
+
+* OnClick 이벤트로 플레이어가 선택한 모드 저장
+
+<br/>
+
+### 캐릭터 선택 및 온오프
+<img width="261" height="298" alt="image" src="https://github.com/user-attachments/assets/0b8332de-579b-43b0-a87f-9419d176077b" />
+<img width="377" height="88" alt="image" src="https://github.com/user-attachments/assets/057ca14a-b08e-4e5f-85d3-91fdfd7b9db2" />
+
+* 해당 토글에 OnValueChanged 이벤트에 On_Character_Code함수 바인드
+   
+> CharacterManager
+
+    [SerializeField]
+    public List<GameObject> Characters = new List<GameObject>();
+
+    private const int Young_Boy = 1, Boy = 2, Girl = 3;
+    private int Character_Code = Young_Boy;
+    
+    //On_Character_Code()
+    public void On_Character_Code(int code)
+    {
+        switch (code)
+        {
+            case Young_Boy:
+                Character_Code = Young_Boy;
+                off_Chracters();
+                Characters[code-1].SetActive(true);
+                break;
+            case Boy:
+                Character_Code = Boy;
+                off_Chracters();
+                Characters[code - 1].SetActive(true);
+                break;
+            case Girl:
+                Character_Code = Girl;
+                off_Chracters();
+                Characters[code - 1].SetActive(true);
+                break;
+        }
+    }
+
+    private void off_Chracters()
+    {
+        foreach (var ch in Characters)
+        {
+            ch.SetActive(false);
+        }
+    }
+
+* OnValueChanged 이벤트 발생시 Character_Code 갱신
+* 캐릭터 선택씬 off_Chracters 함수로 캐릭터 비활성화 및 선택 캐릭터 활성화
+
+### 캐릭터 스폰
+
+> CharacterManager
+    
+    private Dictionary<int, GameObject> CharacterMap = new Dictionary<int, GameObject>();
+
+    [SerializeField]
+    private List<string> CharacterNames = new List<string>() { "None", "Player_V9_CamTest", 
+        "Player_Man_V9_CamTest", "Player_Girl_V9_CamTest" };
+    
+    private void Start()
+    {
+        CharacterMap[Young_Boy] = Resources.Load<GameObject>(CharacterNames[Young_Boy]);
+        CharacterMap[Boy] = Resources.Load<GameObject>(CharacterNames[Boy]);
+        CharacterMap[Girl] = Resources.Load<GameObject>(CharacterNames[Girl]);
+    }
+
+    public string GetSelectedCharacterName() { return CharacterMap[Character_Code].name; }
+
+    public GameObject GetSelectedCharacter() { return CharacterMap[Character_Code]; }
+
+* CharacterMap 캐릭터 애셋을 저장할 자료구조
+* CharacterNames 캐릭터의 경로를 저장할 자료구조
+* Start() 함수에서 CharacterMap 초기화
+* GetSelectedCharacterName() 함수는 멀티플레이에서 Resource 폴더를 이용해 캐릭터 생성시 사용
+* GetSelectedCharacter() 함수는 싱글플레이시 캐릭터 생성시 사용
 
 <br/>
 
 ## 캐릭터 컨트롤
+캐릭터 이동에 필요한
+<a href="https://assetstore.unity.com/packages/tools/input-management/joystick-pack-107631?srsltid=AfmBOoooMs3dACuBTGDoAHcQsbaErge2w09_yHIQnSbk9xnvevOYArFl" >조이스틱</a>은 해당 애셋을 사용했습니다
 
+> CharacterManager
+
+    [SerializeField]
+    private VariableJoystick joystick;
+    
+    public void Move()
+    {
+        if (CharacterManager.Instance != null && CharacterManager.Instance.onOffSet == CharacterManager.OnOffSet.OnLine
+            && PV != null && !PV.IsMine) return;
+
+            Vector2 moveInput = new Vector2(joystick.Horizontal, joystick.Vertical);
+            bool isMove = moveInput.magnitude != 0;
+            animator.SetBool("isMove", isMove);
+   
+        if (isMove)
+        {
+            Vector3 lookForward = new Vector3(cameraArm.forward.x, 0f, cameraArm.forward.z).normalized;
+            Vector3 lookRight = new Vector3(cameraArm.right.x, 0f, cameraArm.right.z).normalized;
+            Vector3 moveDir = lookForward * moveInput.y + lookRight * moveInput.x;
+
+            characterBody.forward = moveDir;
+            transform.position += moveDir * Time.deltaTime * player_speed;
+        }
+        else if(!isMove && !isJump)
+        {
+            characterBody.transform.localPosition = new Vector3(0, 0, 0);
+        }
+    }
+
+* CharacterManager.Instance가 null인 경우는 싱글모드 씬으로 직접 들어간 경우   
+  onOffSet이 OnLine일 경우만 체크하여 싱글플레이에서도 해당 함수를 사용 가능
+* PV != null && !PV.IsMine 포톤뷰를 체크하여 멀티플레이에서 자기 캐릭터가 아닌경우 움직일 수 없도록 제한
+* VariableJoystick에 저장되는 joystick.Horizontal, joystick.Vertical로 움직임을 구현
 
 <br/>
 
@@ -113,6 +255,10 @@ Start 함수에서 CharacterManager 초기화
 
 ## 사진 기능
 
+
+<br/>
+
+## 날씨
 
 <br/>
 
