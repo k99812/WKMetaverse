@@ -333,21 +333,18 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 
 > ChatManager
 
-      public class ChatManager : MonoBehaviour
+      public void sendMessage()
       {
-         public void sendMessage()
-         {
-            chat(true, messagesInput.text, PhotonNetwork.LocalPlayer.NickName, null);
-            photonView.RPC("send_RPC_Message", RpcTarget.Others, messagesInput.text);
-            messagesInput.ActivateInputField();
-            messagesInput.text = "";
-         }
-
-         [PunRPC]
-         public void send_RPC_Message(string message)
-         {
-             chat(false, message, PhotonNetwork.LocalPlayer.NickName, null);
-         }
+         chat(true, messagesInput.text, PhotonNetwork.LocalPlayer.NickName, null);
+         photonView.RPC("send_RPC_Message", RpcTarget.Others, messagesInput.text);
+         messagesInput.ActivateInputField();
+         messagesInput.text = "";
+      }
+         
+      [PunRPC]
+      public void send_RPC_Message(string message)
+      {
+          chat(false, message, PhotonNetwork.LocalPlayer.NickName, null);
       }
 
 * 영상을 토대로 chat(bool isSend, string Message, string userName, Texture texture)로 구현했으며
@@ -386,6 +383,9 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 * 사진 촬영 버튼에 startCor 함수를 바인드
 * ShootingScreen 함수에선 버튼을 비활성화 시킨후
   yield return new WaitForEndOfFrame()로 한프레임 후 로직 실행
+* Images는 미리보기 사진의 배경 이미지
+
+<br/>
 
 > Self_Cam
 
@@ -407,6 +407,89 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
             }
          }
       }
+
+* 스크린샷 이름을 생성하여 플랫폼 별로 함수를 실행
+
+<br/>
+
+> Self_Cam
+
+      public class Self_Cam : MonoBehaviour
+      {
+         private void CaptureScreenPC(string fileName)
+         {
+            texture = ScreenCapture.CaptureScreenshotAsTexture();
+            string path = Application.persistentDataPath + fileName;
+            
+            byte[] bytes;
+            bytes = texture.EncodeToPNG();
+            System.IO.File.WriteAllBytes(path, bytes);
+            Debug.Log("여기에 저장되었습니다. " + path);
+         }
+      }
+
+* PC의 경우 Application.persistentDataPath + fileName으로 경로지정
+* System.IO.File.WriteAllBytes 함수로 캡쳐화면 저장
+
+<br/>
+
+> Self_Cam
+
+      public class Self_Cam : MonoBehaviour
+      {
+         private void CaptureScreenMobile(string fileName)
+         {
+            texture = ScreenCapture.CaptureScreenshotAsTexture();
+            
+            NativeGallery.Permission permission = NativeGallery.CheckPermission(NativeGallery.PermissionType.Write);
+            if(permission == NativeGallery.Permission.Denied)
+            {
+               if (NativeGallery.CanOpenSettings())
+               {
+                  NativeGallery.OpenSettings();
+               }
+            }
+         
+            string albumName = "WonkwangUS";
+            NativeGallery.SaveImageToGallery(texture, albumName, fileName, (success, path) => { Debug.Log(success); Debug.Log(path); });
+         }
+      }
+
+* 모바일 플랫폼의 경우 유니티 애셋 NativeGallery 플러그인을 통하여 파일 저장
+
+<br/>
+
+> Self_Cam
+
+      public class Self_Cam : MonoBehaviour
+      {
+         private void showPreview()
+         {
+            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+            capture_Image.sprite = sprite;
+         }
+
+         private IEnumerator FadeIn(float time)
+         {
+            Color color = capture_Image.color;
+            
+            while(color.a < 1f)
+            {
+               color.a += Time.deltaTime/time;
+               capture_Image.color = color;
+               
+               if(color.a >= 1f)
+               {
+                  color.a = 1f;
+                  capture_Image.color = color;
+               }
+               yield return null;
+            }
+         }
+      }
+
+* showPreview 함수를 실행하여 sprite를 생성 하여 미리보기 스프라이트에 지정
+* 코루틴을 이용해 스프라이트의 alpha 값을 조절하여 효과 구현
 
 <br/>
 
