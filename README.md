@@ -105,7 +105,7 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
        
     }
 
-캐릭터 매니저는 싱글톤 패턴을 활용하여 인스턴스를 생성
+* 캐릭터 매니저는 싱글톤 패턴을 활용하여 인스턴스를 생성
 
 <br/>
 
@@ -113,6 +113,8 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 <img width="556" height="135" alt="image" src="https://github.com/user-attachments/assets/5f54ae31-d1b8-4abf-9685-c61dc6a63ebe" />
 
 * 버튼 OnClick 이벤트에 Set_OnOff 함수 바인드
+
+<br/>
 
 > CharacterManager
     
@@ -136,7 +138,9 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 <img width="377" height="88" alt="image" src="https://github.com/user-attachments/assets/057ca14a-b08e-4e5f-85d3-91fdfd7b9db2" />
 
 * 해당 토글에 OnValueChanged 이벤트에 On_Character_Code함수 바인드
-   
+
+<br/>
+
 > CharacterManager
 
     [SerializeField]
@@ -179,6 +183,8 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 * OnValueChanged 이벤트 발생시 Character_Code 갱신
 * 캐릭터 선택씬 off_Chracters 함수로 캐릭터 비활성화 및 선택 캐릭터 활성화
 
+<br/>
+
 ### 캐릭터 스폰
 
 > CharacterManager
@@ -209,10 +215,11 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 <br/>
 
 ## 캐릭터 컨트롤
+### 캐릭터 이동
 캐릭터 이동에 필요한
 <a href="https://assetstore.unity.com/packages/tools/input-management/joystick-pack-107631?srsltid=AfmBOoooMs3dACuBTGDoAHcQsbaErge2w09_yHIQnSbk9xnvevOYArFl" >조이스틱</a>은 해당 애셋을 사용했습니다
 
-> CharacterManager
+> VirtualJoyStickMove
 
     [SerializeField]
     private VariableJoystick joystick;
@@ -248,17 +255,163 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 
 <br/>
 
-## 채팅 기능
+### 카메라 로테이션
 
+> CameraDragRotation
+
+   public class CameraDragRotation : MonoBehaviour, IBeginDragHandler, IDragHandler
+   {
+      [SerializeField]
+      private float limit_yAngle_lest = -30f;
+      [SerializeField]
+      private float limit_yAngle_MAX = 70;
+
+      Vector3 FirstPoint, Vector3 SecondPoint;
+      float xAngle, float yAngle;
+      float xAngleTemp, float yAngleTemp;
+   }
+
+* IBeginDragHandler, IDragHandler 인터페이스를 상속받아
+  드레그 이벤트를 통해 카메라 암 회전 구현
+* FirstPoint, SecondPoint: 첫 터치 위치와 드래그로 인해 변하는 위치 저장
+* xAngle, yAngle: 회전할 각도를 저장
+* xAngleTemp, yAngleTemp: 드레그 시작시 기존 앵글을 저장
+
+<br/>
+
+> CameraDragRotation
+
+    public class CameraDragRotation : MonoBehaviour, IBeginDragHandler, IDragHandler
+   {
+      public void OnBeginDrag(PointerEventData eventData)
+      {
+          if (CharacterManager.Instance != null && CharacterManager.Instance.onOffSet == CharacterManager.OnOffSet.OnLine
+              && PV != null && !PV.IsMine) return;
+          BeginDrag(eventData.position);
+      }
+
+      public void BeginDrag(Vector2 a_FirstPoint)
+      {
+         FirstPoint = a_FirstPoint;
+         xAngleTemp = xAngle, yAngleTemp = yAngle;
+      }
+   }
+
+* 싱글플레이, 씬으로 다이렉트 접근(캐릭터매니저 인스턴스 null), 포톤뷰(캐릭터 소유가 플레이어)
+  위의 경우에만 실행하도록 if문으로 체크
+* OnBeginDrag 이벤트 발생시 pos을 BeginDrag 함수로 넘김
+* 첫번째 터치 위치와 기존 앵글을 저장
+
+<br/>
+
+> CameraDragRotation
+
+    public class CameraDragRotation : MonoBehaviour, IBeginDragHandler, IDragHandler
+   {
+      public void OnDrag(PointerEventData eventData)
+      {
+          if (CharacterManager.Instance != null && CharacterManager.Instance.onOffSet == CharacterManager.OnOffSet.OnLine
+              && PV != null && !PV.IsMine) return;
+          OnDrag(eventData.position);       
+      }
+
+      public void OnDrag(Vector2 a_SecondPoint)
+      {
+          SecondPoint = a_SecondPoint;
+          xAngle = xAngleTemp + (SecondPoint.x - FirstPoint.x) * 180 / Screen.width;
+          yAngle = yAngleTemp - (SecondPoint.y - FirstPoint.y) * 90 * 3f / Screen.height; // Y값 변화가 좀 느려서 3배 곱해줌.
+
+          yAngle = Mathf.Clamp(yAngle, limit_yAngle_lest, limit_yAngle_MAX);
+
+          cameraArm.rotation = Quaternion.Euler(yAngle, xAngle, 0.0f);
+      }
+   }
+
+* OnDrag 이벤트 발생시 데이터를 OnDrag(Vector2 a_SecondPoint)에 넘겨줌
+* SecondPoint - FirstPoint 로 첫번째 터치에서 움직인 만큼 기존 앵글에 더하여 새로운 앵글을 계산
+* Mathf.Clamp로 Y각도를 제한 후 Quaternion.Euler 함수로 카메라암 회전
+
+<br/>
+
+## 채팅 기능
+채팅 기능의 주요 로직은 <a href="https://www.youtube.com/watch?v=iARzkDbhA8k">해당영상</a>을 참고하며 만들었습니다.
+
+> ChatManager
+
+   public class ChatManager : MonoBehaviour
+   {
+      public void sendMessage()
+      {
+         chat(true, messagesInput.text, PhotonNetwork.LocalPlayer.NickName, null);
+         photonView.RPC("send_RPC_Message", RpcTarget.Others, messagesInput.text);
+         messagesInput.ActivateInputField();
+         messagesInput.text = "";
+      }
+
+      [PunRPC]
+      public void send_RPC_Message(string message)
+      {
+          chat(false, message, PhotonNetwork.LocalPlayer.NickName, null);
+      }
+   }
+
+* 영상을 토대로 chat(bool isSend, string Message, string userName, Texture texture)로 구현했으며
+* sendMessage 함수를 send 버튼 및 Enter 키입력과 바인딩 했습니다.
+* sendMessage 실행시 자기자신에게는 isSend = true로 설정하여 UI를 스폰합니다
+  RPC함수를 RpcTarget을 자기자신을 제외하는 Others로 설정해 호출합니다.
 
 <br/>
 
 ## 사진 기능
+> Self_Cam
 
+   public class Self_Cam : MonoBehaviour
+   {
+      public void startCor()
+      {
+         StartCoroutine(ShootingScreen());
+      }
+      
+      private IEnumerator ShootingScreen()
+      {
+          shootingSound.Play();
+          foreach (var button in Buttons)
+          {
+             button.SetActive(false);
+          }
 
-<br/>
+          yield return new WaitForEndOfFrame();
+          CaptureScreen();
+          Images.SetActive(true);
+          showPreview();
+          StartCoroutine(FadeIn(time));
+      }
+   }
 
-## 날씨
+* 사진 촬영 버튼에 startCor 함수를 바인드
+* ShootingScreen 함수에선 버튼을 비활성화 시킨후
+  yield return new WaitForEndOfFrame()로 한프레임 후 로직 실행
+
+> Self_Cam
+
+    public class Self_Cam : MonoBehaviour
+   {
+      private void CaptureScreen()
+      {
+          string tempDate = System.DateTime.Now.ToString("yyyy-mm-dd-mm-ss");
+          string fileName = "WonkwangUs-ScreenShoot-" + tempDate + ".png";
+
+          //플랫폼 분기
+          if(Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+          {
+              CaptureScreenMobile(fileName);
+          }
+          else if(Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor)
+          {
+              CaptureScreenPC(fileName);
+          }
+      }
+   }
 
 <br/>
 
