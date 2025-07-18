@@ -35,16 +35,9 @@ public class VirtualJoyStickMove : MonoBehaviour
     [SerializeField]
     private GameObject[] uiObj;
 
-    private CharacterManager characterManager;
-
     private void Awake()
     {
         animator = characterBody.GetComponent<Animator>();
-        GameObject gameObject = GameObject.Find("CharacterManager");
-        if (gameObject != null)
-        {
-            characterManager = gameObject.GetComponent<CharacterManager>();
-        }
     }
 
     // Start is called before the first frame update
@@ -60,7 +53,7 @@ public class VirtualJoyStickMove : MonoBehaviour
 
     public void Move()
     {
-        if (characterManager != null && characterManager.onOffSet == CharacterManager.OnOffSet.OnLine
+        if (CharacterManager.Instance != null && CharacterManager.Instance.onOffSet == CharacterManager.OnOffSet.OnLine
             && PV != null && !PV.IsMine) return;
 
         // 이동 방향키 입력 값 가져오기
@@ -92,7 +85,7 @@ public class VirtualJoyStickMove : MonoBehaviour
     //점프 
     public void Jump()
     {
-        if (characterManager != null && characterManager.onOffSet == CharacterManager.OnOffSet.OnLine
+        if (CharacterManager.Instance != null && CharacterManager.Instance.onOffSet == CharacterManager.OnOffSet.OnLine
             && PV != null && !PV.IsMine) return;
 
         if (!isJump)
