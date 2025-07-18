@@ -360,28 +360,28 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 ## 사진 기능
 > Self_Cam
 
-   public class Self_Cam : MonoBehaviour
-   {
-      public void startCor()
+      public class Self_Cam : MonoBehaviour   
       {
-         StartCoroutine(ShootingScreen());
-      }
+         public void startCor()
+         {
+            StartCoroutine(ShootingScreen());
+         }
       
-      private IEnumerator ShootingScreen()
-      {
-          shootingSound.Play();
-          foreach (var button in Buttons)
-          {
-             button.SetActive(false);
-          }
-
-          yield return new WaitForEndOfFrame();
-          CaptureScreen();
-          Images.SetActive(true);
-          showPreview();
-          StartCoroutine(FadeIn(time));
+         private IEnumerator ShootingScreen()
+         {
+            shootingSound.Play();
+            foreach (var button in Buttons)
+            {
+               button.SetActive(false);
+            }
+               
+            yield return new WaitForEndOfFrame();
+            CaptureScreen();
+            Images.SetActive(true);
+            showPreview();
+            StartCoroutine(FadeIn(time));
+         }
       }
-   }
 
 * 사진 촬영 버튼에 startCor 함수를 바인드
 * ShootingScreen 함수에선 버튼을 비활성화 시킨후
@@ -389,24 +389,24 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 
 > Self_Cam
 
-    public class Self_Cam : MonoBehaviour
-   {
-      private void CaptureScreen()
+      public class Self_Cam : MonoBehaviour
       {
-          string tempDate = System.DateTime.Now.ToString("yyyy-mm-dd-mm-ss");
-          string fileName = "WonkwangUs-ScreenShoot-" + tempDate + ".png";
-
-          //플랫폼 분기
-          if(Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
-          {
-              CaptureScreenMobile(fileName);
-          }
-          else if(Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor)
-          {
-              CaptureScreenPC(fileName);
-          }
+         private void CaptureScreen()
+         {
+            string tempDate = System.DateTime.Now.ToString("yyyy-mm-dd-mm-ss");
+            string fileName = "WonkwangUs-ScreenShoot-" + tempDate + ".png";
+            
+            //플랫폼 분기
+            if(Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+            {
+               CaptureScreenMobile(fileName);
+            }
+            else if(Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor)
+            {
+               CaptureScreenPC(fileName);
+            }
+         }
       }
-   }
 
 <br/>
 
