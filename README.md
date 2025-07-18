@@ -259,8 +259,8 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 
 > CameraDragRotation
 
-   public class CameraDragRotation : MonoBehaviour, IBeginDragHandler, IDragHandler
-   {
+    public class CameraDragRotation : MonoBehaviour, IBeginDragHandler, IDragHandler
+
       [SerializeField]
       private float limit_yAngle_lest = -30f;
       [SerializeField]
@@ -269,7 +269,6 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
       Vector3 FirstPoint, Vector3 SecondPoint;
       float xAngle, float yAngle;
       float xAngleTemp, float yAngleTemp;
-   }
 
 * IBeginDragHandler, IDragHandler 인터페이스를 상속받아
   드레그 이벤트를 통해 카메라 암 회전 구현
@@ -281,13 +280,11 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 
 > CameraDragRotation
 
-    public class CameraDragRotation : MonoBehaviour, IBeginDragHandler, IDragHandler
-   {
       public void OnBeginDrag(PointerEventData eventData)
       {
-          if (CharacterManager.Instance != null && CharacterManager.Instance.onOffSet == CharacterManager.OnOffSet.OnLine
-              && PV != null && !PV.IsMine) return;
-          BeginDrag(eventData.position);
+            if (CharacterManager.Instance != null && CharacterManager.Instance.onOffSet == CharacterManager.OnOffSet.OnLine
+               && PV != null && !PV.IsMine) return;
+            BeginDrag(eventData.position);
       }
 
       public void BeginDrag(Vector2 a_FirstPoint)
@@ -295,7 +292,6 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
          FirstPoint = a_FirstPoint;
          xAngleTemp = xAngle, yAngleTemp = yAngle;
       }
-   }
 
 * 싱글플레이, 씬으로 다이렉트 접근(캐릭터매니저 인스턴스 null), 포톤뷰(캐릭터 소유가 플레이어)
   위의 경우에만 실행하도록 if문으로 체크
@@ -306,25 +302,22 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 
 > CameraDragRotation
 
-    public class CameraDragRotation : MonoBehaviour, IBeginDragHandler, IDragHandler
+   public void OnDrag(PointerEventData eventData)
    {
-      public void OnDrag(PointerEventData eventData)
-      {
-          if (CharacterManager.Instance != null && CharacterManager.Instance.onOffSet == CharacterManager.OnOffSet.OnLine
-              && PV != null && !PV.IsMine) return;
-          OnDrag(eventData.position);       
-      }
+      if (CharacterManager.Instance != null && CharacterManager.Instance.onOffSet == CharacterManager.OnOffSet.OnLine
+         && PV != null && !PV.IsMine) return;
+      OnDrag(eventData.position);       
+   }
 
-      public void OnDrag(Vector2 a_SecondPoint)
-      {
-          SecondPoint = a_SecondPoint;
-          xAngle = xAngleTemp + (SecondPoint.x - FirstPoint.x) * 180 / Screen.width;
-          yAngle = yAngleTemp - (SecondPoint.y - FirstPoint.y) * 90 * 3f / Screen.height; // Y값 변화가 좀 느려서 3배 곱해줌.
-
-          yAngle = Mathf.Clamp(yAngle, limit_yAngle_lest, limit_yAngle_MAX);
-
-          cameraArm.rotation = Quaternion.Euler(yAngle, xAngle, 0.0f);
-      }
+   public void OnDrag(Vector2 a_SecondPoint)
+   {
+      SecondPoint = a_SecondPoint;
+      xAngle = xAngleTemp + (SecondPoint.x - FirstPoint.x) * 180 / Screen.width;
+      yAngle = yAngleTemp - (SecondPoint.y - FirstPoint.y) * 90 * 3f / Screen.height;
+      
+      yAngle = Mathf.Clamp(yAngle, limit_yAngle_lest, limit_yAngle_MAX);
+      
+      cameraArm.rotation = Quaternion.Euler(yAngle, xAngle, 0.0f);
    }
 
 * OnDrag 이벤트 발생시 데이터를 OnDrag(Vector2 a_SecondPoint)에 넘겨줌
