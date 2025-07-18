@@ -25,18 +25,6 @@
 
 <br/>
 
-## 플레이모습
----
-![Animation](https://github.com/k99812/WKMetaverse/assets/108670965/e33e461d-b901-4bcd-a601-a2b38b31b9a2)
-<br>
-![Animation (1)](https://github.com/k99812/WKMetaverse/assets/108670965/66821ab9-f5f7-46d4-9fb1-78575a008c25)  
-
-![Animation (3)](https://github.com/k99812/WKMetaverse/assets/108670965/67655280-2ba0-4a1c-8454-946ee6042e98)  
-
-![Animation (2)](https://github.com/k99812/WKMetaverse/assets/108670965/74ea1206-8cfc-4f3f-b7ff-1461fb4b5c1c)  
-
-<br/>
-
 # 기술 설명서
 ## 프로젝트 전체 구성
 <img width="1434" height="449" alt="image" src="https://github.com/user-attachments/assets/25b6e2c8-de4d-4367-98e6-b3cd4e8cea2e" />
@@ -134,6 +122,7 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 <br/>
 
 ### 캐릭터 선택 및 온오프
+![Animation (1)](https://github.com/k99812/WKMetaverse/assets/108670965/66821ab9-f5f7-46d4-9fb1-78575a008c25)  
 <img width="261" height="298" alt="image" src="https://github.com/user-attachments/assets/0b8332de-579b-43b0-a87f-9419d176077b" />
 <img width="377" height="88" alt="image" src="https://github.com/user-attachments/assets/057ca14a-b08e-4e5f-85d3-91fdfd7b9db2" />
 
@@ -216,6 +205,8 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 
 ## 캐릭터 컨트롤
 ### 캐릭터 이동
+![Animation](https://github.com/k99812/WKMetaverse/assets/108670965/e33e461d-b901-4bcd-a601-a2b38b31b9a2)
+
 캐릭터 이동에 필요한
 <a href="https://assetstore.unity.com/packages/tools/input-management/joystick-pack-107631?srsltid=AfmBOoooMs3dACuBTGDoAHcQsbaErge2w09_yHIQnSbk9xnvevOYArFl" >조이스틱</a>은 해당 애셋을 사용했습니다
 
@@ -329,6 +320,8 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 <br/>
 
 ## 채팅 기능
+![Animation (3)](https://github.com/k99812/WKMetaverse/assets/108670965/67655280-2ba0-4a1c-8454-946ee6042e98)  
+
 채팅 기능의 주요 로직은 <a href="https://www.youtube.com/watch?v=iARzkDbhA8k">해당영상</a>을 참고하며 만들었습니다.
 
 > ChatManager
@@ -347,14 +340,16 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
           chat(false, message, PhotonNetwork.LocalPlayer.NickName, null);
       }
 
-* 영상을 토대로 chat(bool isSend, string Message, string userName, Texture texture)로 구현했으며
-* sendMessage 함수를 send 버튼 및 Enter 키입력과 바인딩 했습니다.
-* sendMessage 실행시 자기자신에게는 isSend = true로 설정하여 UI를 스폰합니다   
-  RPC함수를 RpcTarget을 자기자신을 제외하는 Others로 설정해 호출합니다.
+* 영상을 토대로 chat(bool isSend, string Message, string userName, Texture texture)로 구현
+* sendMessage 함수를 send 버튼 및 Enter 키입력과 바인딩
+* sendMessage 실행시 자기자신에게는 isSend = true로 설정하여 UI를 스폰  
+  RPC함수를 RpcTarget을 자기자신을 제외하는 Others로 설정해 호출
 
 <br/>
 
 ## 사진 기능
+![Animation (2)](https://github.com/k99812/WKMetaverse/assets/108670965/74ea1206-8cfc-4f3f-b7ff-1461fb4b5c1c)  
+
 > Self_Cam
 
       public class Self_Cam : MonoBehaviour   
