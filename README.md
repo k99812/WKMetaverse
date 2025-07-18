@@ -295,7 +295,7 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
          xAngleTemp = xAngle, yAngleTemp = yAngle;
       }
 
-* 싱글플레이, 씬으로 다이렉트 접근(캐릭터매니저 인스턴스 null), 포톤뷰(캐릭터 소유가 플레이어)
+* 싱글플레이, 씬으로 다이렉트 접근(캐릭터매니저 인스턴스 null), 포톤뷰(캐릭터 소유가 플레이어)   
   위의 경우에만 실행하도록 if문으로 체크
 * OnBeginDrag 이벤트 발생시 pos을 BeginDrag 함수로 넘김
 * 첫번째 터치 위치와 기존 앵글을 저장
@@ -349,7 +349,7 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 
 * 영상을 토대로 chat(bool isSend, string Message, string userName, Texture texture)로 구현했으며
 * sendMessage 함수를 send 버튼 및 Enter 키입력과 바인딩 했습니다.
-* sendMessage 실행시 자기자신에게는 isSend = true로 설정하여 UI를 스폰합니다
+* sendMessage 실행시 자기자신에게는 isSend = true로 설정하여 UI를 스폰합니다   
   RPC함수를 RpcTarget을 자기자신을 제외하는 Others로 설정해 호출합니다.
 
 <br/>
@@ -381,7 +381,7 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
       }
 
 * 사진 촬영 버튼에 startCor 함수를 바인드
-* ShootingScreen 함수에선 버튼을 비활성화 시킨후
+* ShootingScreen 함수에선 버튼을 비활성화 시킨후   
   yield return new WaitForEndOfFrame()로 한프레임 후 로직 실행
 * Images는 미리보기 사진의 배경 이미지
 
