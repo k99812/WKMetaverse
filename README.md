@@ -259,16 +259,18 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 
 > CameraDragRotation
 
-    public class CameraDragRotation : MonoBehaviour, IBeginDragHandler, IDragHandler
+      public class CameraDragRotation : MonoBehaviour, IBeginDragHandler, IDragHandler
+      {
 
-      [SerializeField]
-      private float limit_yAngle_lest = -30f;
-      [SerializeField]
-      private float limit_yAngle_MAX = 70;
+         [SerializeField]
+         private float limit_yAngle_lest = -30f;
+         [SerializeField]
+         private float limit_yAngle_MAX = 70;
 
-      Vector3 FirstPoint, Vector3 SecondPoint;
-      float xAngle, float yAngle;
-      float xAngleTemp, float yAngleTemp;
+         Vector3 FirstPoint, Vector3 SecondPoint;
+         float xAngle, float yAngle;
+         float xAngleTemp, float yAngleTemp;
+      }
 
 * IBeginDragHandler, IDragHandler 인터페이스를 상속받아
   드레그 이벤트를 통해 카메라 암 회전 구현
@@ -302,23 +304,23 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 
 > CameraDragRotation
 
-   public void OnDrag(PointerEventData eventData)
-   {
-      if (CharacterManager.Instance != null && CharacterManager.Instance.onOffSet == CharacterManager.OnOffSet.OnLine
-         && PV != null && !PV.IsMine) return;
-      OnDrag(eventData.position);       
-   }
+      public void OnDrag(PointerEventData eventData)
+      {
+            if (CharacterManager.Instance != null && CharacterManager.Instance.onOffSet == CharacterManager.OnOffSet.OnLine
+               && PV != null && !PV.IsMine) return;
+         OnDrag(eventData.position);       
+      }
 
-   public void OnDrag(Vector2 a_SecondPoint)
-   {
-      SecondPoint = a_SecondPoint;
-      xAngle = xAngleTemp + (SecondPoint.x - FirstPoint.x) * 180 / Screen.width;
-      yAngle = yAngleTemp - (SecondPoint.y - FirstPoint.y) * 90 * 3f / Screen.height;
+      public void OnDrag(Vector2 a_SecondPoint)
+      {
+         SecondPoint = a_SecondPoint;
+         xAngle = xAngleTemp + (SecondPoint.x - FirstPoint.x) * 180 / Screen.width;
+         yAngle = yAngleTemp - (SecondPoint.y - FirstPoint.y) * 90 * 3f / Screen.height;
+         
+         yAngle = Mathf.Clamp(yAngle, limit_yAngle_lest, limit_yAngle_MAX);
       
-      yAngle = Mathf.Clamp(yAngle, limit_yAngle_lest, limit_yAngle_MAX);
-      
-      cameraArm.rotation = Quaternion.Euler(yAngle, xAngle, 0.0f);
-   }
+         cameraArm.rotation = Quaternion.Euler(yAngle, xAngle, 0.0f);
+      }
 
 * OnDrag 이벤트 발생시 데이터를 OnDrag(Vector2 a_SecondPoint)에 넘겨줌
 * SecondPoint - FirstPoint 로 첫번째 터치에서 움직인 만큼 기존 앵글에 더하여 새로운 앵글을 계산
@@ -331,22 +333,22 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 
 > ChatManager
 
-   public class ChatManager : MonoBehaviour
-   {
-      public void sendMessage()
+      public class ChatManager : MonoBehaviour
       {
-         chat(true, messagesInput.text, PhotonNetwork.LocalPlayer.NickName, null);
-         photonView.RPC("send_RPC_Message", RpcTarget.Others, messagesInput.text);
-         messagesInput.ActivateInputField();
-         messagesInput.text = "";
-      }
+         public void sendMessage()
+         {
+            chat(true, messagesInput.text, PhotonNetwork.LocalPlayer.NickName, null);
+            photonView.RPC("send_RPC_Message", RpcTarget.Others, messagesInput.text);
+            messagesInput.ActivateInputField();
+            messagesInput.text = "";
+         }
 
-      [PunRPC]
-      public void send_RPC_Message(string message)
-      {
-          chat(false, message, PhotonNetwork.LocalPlayer.NickName, null);
+         [PunRPC]
+         public void send_RPC_Message(string message)
+         {
+             chat(false, message, PhotonNetwork.LocalPlayer.NickName, null);
+         }
       }
-   }
 
 * 영상을 토대로 chat(bool isSend, string Message, string userName, Texture texture)로 구현했으며
 * sendMessage 함수를 send 버튼 및 Enter 키입력과 바인딩 했습니다.
