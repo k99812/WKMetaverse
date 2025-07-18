@@ -13,7 +13,6 @@ public class CharacterManager : MonoBehaviour
     [SerializeField]
     public List<GameObject> Characters = new List<GameObject>();
 
-    [SerializeField]
     private Dictionary<int, GameObject> CharacterMap = new Dictionary<int, GameObject>();
 
     private const int Young_Boy = 1, Boy = 2, Girl = 3;
@@ -24,7 +23,8 @@ public class CharacterManager : MonoBehaviour
 
     private int Character_Code = Young_Boy;
 
-    private static CharacterManager instance = null;
+    //다른 클래스에서 접근은 CharacterManager.Instance.접근함수 or 변수
+    public static CharacterManager Instance { get; private set;  }
 
     [Space(10f)]
     public string roomNum = "";
@@ -34,9 +34,9 @@ public class CharacterManager : MonoBehaviour
     public int lastPotalNum = 0;
     private void Awake()
     {
-        if (null == instance)
+        if (null == Instance)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
         else
@@ -75,19 +75,17 @@ public class CharacterManager : MonoBehaviour
         }
     }
 
-    public int get_Character_Code() { return Character_Code; }
-
-    public string GetSelectedCharacterName() { return CharacterMap[Character_Code].name; }
-
-    public GameObject GetSelectedCharacter() { return CharacterMap[Character_Code]; }
-
     private void off_Chracters()
     {
-        foreach(var ch in Characters) 
+        foreach (var ch in Characters)
         {
             ch.SetActive(false);
         }
     }
+
+    public string GetSelectedCharacterName() { return CharacterMap[Character_Code].name; }
+
+    public GameObject GetSelectedCharacter() { return CharacterMap[Character_Code]; }
 
     public void Set_OnOff(int InCode)
     {
