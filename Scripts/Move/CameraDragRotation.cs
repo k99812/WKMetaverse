@@ -13,8 +13,8 @@ public class CameraDragRotation : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     Vector3 FirstPoint;
     Vector3 SecondPoint;
-    public float xAngle;
-    public float yAngle;
+    float xAngle;
+    float yAngle;
     float xAngleTemp;
     float yAngleTemp;
 
@@ -23,30 +23,22 @@ public class CameraDragRotation : MonoBehaviour, IBeginDragHandler, IDragHandler
     [SerializeField]
     private float limit_yAngle_MAX = 70;
 
-    private CharacterManager characterManager;
-
     private void Start()
     {
         xAngle = 0;
         yAngle = 0;
-
-        GameObject gameObject = GameObject.Find("CharacterManager");
-        if (gameObject != null)
-        {
-            characterManager = gameObject.GetComponent<CharacterManager>();
-        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (characterManager != null && characterManager.onOffSet == CharacterManager.OnOffSet.OnLine
+        if (CharacterManager.Instance != null && CharacterManager.Instance.onOffSet == CharacterManager.OnOffSet.OnLine
             && PV != null && !PV.IsMine) return;
         BeginDrag(eventData.position);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (characterManager != null && characterManager.onOffSet == CharacterManager.OnOffSet.OnLine
+        if (CharacterManager.Instance != null && CharacterManager.Instance.onOffSet == CharacterManager.OnOffSet.OnLine
             && PV != null && !PV.IsMine) return;
         OnDrag(eventData.position);       
     }
@@ -64,11 +56,7 @@ public class CameraDragRotation : MonoBehaviour, IBeginDragHandler, IDragHandler
         xAngle = xAngleTemp + (SecondPoint.x - FirstPoint.x) * 180 / Screen.width;
         yAngle = yAngleTemp - (SecondPoint.y - FirstPoint.y) * 90 * 3f / Screen.height; // Y값 변화가 좀 느려서 3배 곱해줌.
 
-        // 회전값을 40~85로 제한
-        if (yAngle < limit_yAngle_lest)
-            yAngle = limit_yAngle_lest;
-        if (yAngle > limit_yAngle_MAX)
-            yAngle = limit_yAngle_MAX;
+        yAngle = Mathf.Clamp(yAngle, limit_yAngle_lest, limit_yAngle_MAX);
 
         cameraArm.rotation = Quaternion.Euler(yAngle, xAngle, 0.0f);
     }
