@@ -199,7 +199,7 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 * CharacterNames 캐릭터의 경로를 저장할 자료구조
 * Start() 함수에서 CharacterMap 초기화
 * GetSelectedCharacterName() 함수는 멀티플레이에서 Resource 폴더를 이용해 캐릭터 생성시 사용
-* GetSelectedCharacter() 함수는 싱글플레이시 캐릭터 생성시 사용
+* GetSelectedCharacter() 함수는 싱글플레이에서 캐릭터 생성시 사용
 
 <br/>
 
