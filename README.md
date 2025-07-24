@@ -1,14 +1,9 @@
 ## WKDCMetaverseS2
-| 항목 | 내용 | 비고 |
-|------|------|------|
-| 개발 기간 | 2022.06 ~ 2023.02	 |
-| 엔진 | Unity 2021.3.14f1 |
-| 언어 | C# |
-| 주요 시스템 | UGUI / Photon / NativeGallery |
-
-<br/>
-
-아래 링크에서 해당프로젝트에 쓰인 플로우차트를 확인할 수 있습니다.
+Unity와 Photon을 사용하여 다중 사용자 접속이 가능한 메타버스 환경을 구현한 팀 프로젝트입니다.   
+캐릭터 선택, 채팅 시스템, 방 입장 및 이동 로직 등을 클라이언트 측에서 구현하였고, 실시간 멀티플레이   
+동기화와 같은 네트워크 개발의 기초를 체득하였습니다.
+   
+또한 아래 링크에서 해당프로젝트의 플로우차트를 확인할 수 있습니다.
 
 <a href="https://www.figma.com/board/vSDbySXst7xYlMhZew8J1L/WKM-System-flow?node-id=0-1&t=L0rwCpZiX0pDOKq9-1" height="5" width="10" target="_blank" >
 <img src="https://img.shields.io/badge/플로우 차트 (Figma)-000000?style=for-the-badge&logo=figma&logoColor=white">
@@ -16,12 +11,56 @@
 
 <br/>
 
+## 전체 프로젝트
+
+<div align=center>
+
+|프로젝트|프로젝트설명|기간|비고|
+|:---:|:---:|:---:|:---:|
+|<strong>[Project_P](https://github.com/k99812/Project_P)<strong>|언리얼 엔진 <br> 개인 포트폴리오|2024.06 ~ | 진행중 |
+|<strong>[WKMetaverse](https://github.com/k99812/WKMetaverse)<strong>|유니티 멀티플레이 <br> 팀 프로젝트|2022.06 ~ 2023.02| 완료 |
+|<strong>[Cpp](https://github.com/k99812/Cpp)<strong>|코딩테스트 <br> 알고리즘 문제 풀이|2023.05 ~ | 진행중 |
+|<strong>[k99812.github.io](https://github.com/k99812/k99812.github.io)<strong>|포트폴리오 <br> 사이트|2025.06 ~ | 진행중 |
+
+</div>
+
+<br/>
+
+## 목차
+   
+* [개요](#개요)
+* [프로젝트 전체 구성](#프로젝트-전체-구성)
+* [네트워크 매니저](#NetworManager)
+* [캐릭터 매니저](#CharacterManager)
+* [싱글/멀티 모드](#온라인/오프라인-선택)
+* [캐릭터 선택](#캐릭터-선택-및-온오프)
+* [캐릭터 스폰](#캐릭터-스폰)
+* [캐릭터 컨트롤](#캐릭터-컨트롤)
+* [채팅 기능](#채팅-기능)
+* [사진 기능](#사진-기능)
+
+<br/>
+
+## 개요
+| 항목 | 내용 | 비고 |
+|------|------|------|
+| 개발 기간 | 2022.06 ~ 2023.02	 |
+| 엔진 | Unity 2021.3.14f1 |
+| 언어 | C# |
+| 주요 시스템 | UGUI / Photon / NativeGallery |
+
 ## 담당 개발 기능
 
 * 포톤 엔진을 이용해 멀티플레이 구현
 * Photon의 RPC 기능을 활용한 실시간 채팅 구현
 * 캐릭터 스폰 및 동기화, 캐릭터 선택 기능 구현
 * 기본 캐릭터 이동 및 조작 시스템 개발
+
+<div align="right">
+  
+[목차로](#전체-프로젝트)
+
+</div>
 
 <br/>
 
@@ -34,6 +73,12 @@
 2. MainLoby에서 싱글/멀티 중 하나를 선택하면 CharacterSelec Scene으로 이동합니다.
 3. 캐릭터 선택후 Go 버튼을 누르면 Main Scene으로 이동합니다
 4. 싱글플레이의 경우 바로 캐릭터가 스폰되며 멀티플레이는 NetworManager 스크립트에 의해 UI가 표시됩니다
+
+<div align="right">
+  
+[목차로](#전체-프로젝트)
+
+</div>
 
 <br/>
 
@@ -63,6 +108,12 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
     }
 
 * CharacterManager인스턴스를 통해 선택한 캐릭터의 이름을 가져와 PhotonNetwork.Instantiate() 함수를 이용하여 캐릭터 스폰
+
+<div align="right">
+  
+[목차로](#전체-프로젝트)
+
+</div>
 
 <br/>
 
@@ -95,6 +146,12 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 
 * 캐릭터 매니저는 싱글톤 패턴을 활용하여 인스턴스를 생성
 
+<div align="right">
+  
+[목차로](#전체-프로젝트)
+
+</div>
+
 <br/>
 
 ### 온라인/오프라인 선택
@@ -118,6 +175,12 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
     }
 
 * OnClick 이벤트로 플레이어가 선택한 모드 저장
+
+<div align="right">
+  
+[목차로](#전체-프로젝트)
+
+</div>
 
 <br/>
 
@@ -172,6 +235,12 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 * OnValueChanged 이벤트 발생시 Character_Code 갱신
 * 캐릭터 선택씬 off_Chracters 함수로 캐릭터 비활성화 및 선택 캐릭터 활성화
 
+<div align="right">
+  
+[목차로](#전체-프로젝트)
+
+</div>
+
 <br/>
 
 ### 캐릭터 스폰
@@ -200,6 +269,12 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 * Start() 함수에서 CharacterMap 초기화
 * GetSelectedCharacterName() 함수는 멀티플레이에서 Resource 폴더를 이용해 캐릭터 생성시 사용
 * GetSelectedCharacter() 함수는 싱글플레이에서 캐릭터 생성시 사용
+
+<div align="right">
+  
+[목차로](#전체-프로젝트)
+
+</div>
 
 <br/>
 
@@ -243,6 +318,12 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
   onOffSet이 OnLine일 경우만 체크하여 싱글플레이에서도 해당 함수를 사용 가능
 * PV != null && !PV.IsMine 포톤뷰를 체크하여 멀티플레이에서 자기 캐릭터가 아닌경우 움직일 수 없도록 제한
 * VariableJoystick에 저장되는 joystick.Horizontal, joystick.Vertical로 움직임을 구현
+
+<div align="right">
+  
+[목차로](#전체-프로젝트)
+
+</div>
 
 <br/>
 
@@ -317,6 +398,12 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 * SecondPoint - FirstPoint 로 첫번째 터치에서 움직인 만큼 기존 앵글에 더하여 새로운 앵글을 계산
 * Mathf.Clamp로 Y각도를 제한 후 Quaternion.Euler 함수로 카메라암 회전
 
+<div align="right">
+  
+[목차로](#전체-프로젝트)
+
+</div>
+
 <br/>
 
 ## 채팅 기능
@@ -344,6 +431,12 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 * sendMessage 함수를 send 버튼 및 Enter 키입력과 바인딩
 * sendMessage 실행시 자기자신에게는 isSend = true로 설정하여 UI를 스폰  
   RPC함수를 RpcTarget을 자기자신을 제외하는 Others로 설정해 호출
+
+<div align="right">
+  
+[목차로](#전체-프로젝트)
+
+</div>
 
 <br/>
 
@@ -486,6 +579,12 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 * showPreview 함수를 실행하여 sprite를 생성 하여 미리보기 스프라이트에 지정
 * 코루틴을 이용해 스프라이트의 alpha 값을 조절하여 효과 구현
 
+<div align="right">
+  
+[목차로](#전체-프로젝트)
+
+</div>
+
 <br/>
 
 # WKDCMetaverseS2
@@ -531,5 +630,11 @@ Immersive virtual platforms have been around for two decades. Some perhaps remem
 ## License
 
 [MIT License]
+
+<div align="right">
+  
+[목차로](#전체-프로젝트)
+
+</div>
 
 
