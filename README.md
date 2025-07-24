@@ -32,7 +32,7 @@ Unity와 Photon을 사용하여 다중 사용자 접속이 가능한 메타버�
 * [프로젝트 전체 구성](#프로젝트-전체-구성)
 * [네트워크 매니저](#NetworManager)
 * [캐릭터 매니저](#CharacterManager)
-* [싱글/멀티 모드](#온라인/오프라인-선택)
+* [싱글/멀티 모드](#온라인-오프라인-선택)
 * [캐릭터 선택](#캐릭터-선택-및-온오프)
 * [캐릭터 스폰](#캐릭터-스폰)
 * [캐릭터 컨트롤](#캐릭터-컨트롤)
@@ -154,7 +154,7 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
 
 <br/>
 
-### 온라인/오프라인 선택
+### 온라인 오프라인 선택
 <img width="556" height="135" alt="image" src="https://github.com/user-attachments/assets/5f54ae31-d1b8-4abf-9685-c61dc6a63ebe" />
 
 * 버튼 OnClick 이벤트에 Set_OnOff 함수 바인드
