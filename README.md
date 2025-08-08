@@ -109,7 +109,8 @@ NetworManager코드의 경우 캐릭터 스폰 처리만 관여해 스크립트�
          
     }
 
-* CharacterManager인스턴스를 통해 선택한 캐릭터의 이름을 가져와 PhotonNetwork.Instantiate() 함수를 이용하여 캐릭터 스폰
+* CharacterManager인스턴스를 통해 선택한 캐릭터의 이름을 가져와   
+  PhotonNetwork.Instantiate() 함수를 이용하여 캐릭터 스폰
 
 <div align="right">
   
